@@ -26,7 +26,7 @@ Donated so far: &nbsp;&nbsp;&nbsp; 2015: $73 &nbsp;&nbsp;&nbsp; 2016: $2752 &nbs
 
 ![Figwheel heads up example](https://s3.amazonaws.com/bhauman-blog-images/figwheel_image.png)
 
-## Features 
+## Features
 
 #### Live code reloading
 
@@ -141,7 +141,7 @@ figwheel leiningen template.
 Or optionally:
 ```
     lein new figwheel hello-world -- --om       ;; for an om based project
-    lein new figwheel hello-world -- --reagent  ;; for a reagent based project 
+    lein new figwheel hello-world -- --reagent  ;; for a reagent based project
 ```
 
 ## Learning ClojureScript
@@ -162,7 +162,7 @@ you. If you spend a lot of time evaluating all these options it can
 become very frustrating. If you wait a while, and use simple
 tools you will have much more fun actually using the language itself.
 
-## Quick Start 
+## Quick Start
 
 If you are new to Figwheel here is a [Quick
 Start](https://github.com/bhauman/lein-figwheel/wiki/Quick-Start) tutorial.
@@ -193,64 +193,55 @@ section of your project.clj.
 [lein-figwheel "0.5.9"]
 ```
 
-#### Configure your builds
+#### 配置你的编译参数
 
-You also need to have your `:cljsbuild` configuration set up in your
-`project.clj`.
+在你的`project.clj`配置文件中依然存在`:cljsbuild`
 
-Here is an example:
+这里有一个范例:
 
 ```clojure
 :cljsbuild {
-  :builds [ { :id "example" 
-              :source-paths ["src/"]
-              :figwheel true
-              :compiler {  :main "example.core"
-                           :asset-path "js/out"
-                           :output-to "resources/public/js/example.js"
-                           :output-dir "resources/public/js/out" } } ]
+  :builds [ { :id "example" ;; 这里一般是说明配置的环境
+              :source-paths ["src/"] ;; cljs的源代码路径
+              :figwheel true ;; 是否开启figwheel工具
+              :compiler {  :main "example.core" ;; cljs的入口命名空间
+                           :asset-path "js/out" ;; 编译产出的资源路径
+                           :output-to "resources/public/js/example.js" ;; html入口js的产生的路径
+                           :output-dir "resources/public/js/out" } } ] ;; 配套的js库产出的路径
 }
 ```
 
-The important part here is that you have to have at least one `build`
-that has `:optimizations` set to `:none` or `nil`.
+关键在于至少不必在`build`中设置`:optimizations`的参数为`:none`或者`nil`
 
-If you leave out the `:optimizations` key the ClojureScript compiler
-will default to `:none`.
+如果`:optimizations`没有给ClojureScript的编译器设置那么就使用默认值`:none`
 
-Setting `:figwheel true` or `:figwheel { :on-jsload "example.core/reload-hook" }` will
-automagically insert the figwheel client code into your application.
-If you supply `:on-jsload` the name of a function, that function will
-be called after new code gets reloaded.
+设置`:figwheel true`或者`figwheel { :on-jsload "example.core/reload-hook" }`将会
+自动插入figwheel的客户端代码到你的应用中
+如果你提供`:on-jsload`的函数，那么函数将会在新代码重载的时候被执行
 
-**If you want to serve the HTML file that will host your application
-from figwheel's built in server**, then the output directory has to be
-in a directory that can be served by the static webserver. The default
-for the webserver root is "resources/public" so your output files need
-to be in a subdirectory of "resources/public" unless you change the
-webserver root. For now the webserver root has to be in a subdirectory
-of `resources`.
 
-If you are serving your application HTML from your own server you can
-configure `:output-to` and `:output-dir` as you like.
+**如果你想要用fighweel的内置服务器提供你应用的HTML文件**，那么你的输出目录一定是可以被静态
+服务器访问的。默认的服务器更目录是"resources/public"，所以你的输出目录至少需要是这个目录的
+子目录，除非你重新设置服务器的根目录。现在服务器的根目录是`resources`的子目录。
 
-Start the figwheel server. (This will get the first `:optimizations`
-`:none` build)
+如果你自己提供静态服务器，那么`:output-to`和`:output-dir`的设置随你喜欢。
+
+开启figwheel服务器。(`:optimizations`的参数设置为`:none`,优化参数的目的是合并所有的库文件，
+  对于上线有好处)
 
     $ lein figwheel
 
-You also have the option to specify one or more builds
+你可以指定一些编译的目标(就是多个环境的意思)
 
     $ lein figwheel example
     $ lein fighweel example example-devcards
 
-This will start a server at `http://localhost:3449` with your
-resources being served via the compojure `resources` ring handler.
+以上命令可以开启一个`http://localhost:3449`的服务器，并且通过compojure的`resources`
+ring handler来提供静态文件服务器。
 
-So you can load the HTML file that's hosting your ClojureScript app
-by going to `http://localhost:3449/<yourfilename>.html`
+所以你可以通过访问`http://localhost:3449/<文件名称>.html`来访问你的应用。
 
-If you are using your own server please load your app from that server.
+如果你使用你自己的服务器那么就用你的服务器的。
 
 ### Figwheel server side configuration
 
@@ -265,7 +256,7 @@ side configuration parameters:
    :server-ip   "0.0.0.0"     ;; default is "localhost"
 
    ;; CSS reloading (optional)
-   ;; :css-dirs has no default value 
+   ;; :css-dirs has no default value
    ;; if :css-dirs is set figwheel will detect css file changes and
    ;; send them to the browser
    :css-dirs ["resources/public/css"]
@@ -286,7 +277,7 @@ side configuration parameters:
    ;; that script will have to take a file path, a line number and a column
    ;; ie. in  ~/bin/myfile-opener
    ;; #! /bin/sh
-   ;; emacsclient -n +$2:$3 $1 
+   ;; emacsclient -n +$2:$3 $1
    ;;
    :open-file-command "myfile-opener"
 
@@ -294,7 +285,7 @@ side configuration parameters:
    ;; :repl false
 
    ;; to configure a different figwheel logfile path
-   ;; :server-logfile "tmp/logs/figwheel-logfile.log" 
+   ;; :server-logfile "tmp/logs/figwheel-logfile.log"
 
    ;; Start an nREPL server into the running figwheel process
    ;; :nrepl-port 7888
@@ -312,7 +303,7 @@ side configuration parameters:
    ;; you can choose to only load the builds specified
    ;; on the command line
    ;; :load-all-builds false ; default is true
-} 
+}
 ```
 
 ## Client side usage
@@ -333,7 +324,7 @@ you can create this `resources/public/index.html` file:
 </html>
 ```
 
-## CSS Precompilers 
+## CSS Precompilers
 
 Using SASS or LESS and still want to have the benefits of live CSS reloading?
 
@@ -345,20 +336,20 @@ See [lein-cooper](https://github.com/kouphax/lein-cooper) for a
 familiar way to launch processes from lein.
 
 
-## Client side configuration options 
+## Client side configuration options
 
 Instead of setting `:figwheel true` in your cljsbuild configuration
 you can pass a map of options as below:
 
 ```clojure
 :cljsbuild {
-  :builds [ { :id "example" 
+  :builds [ { :id "example"
               :source-paths ["src/"]
 
               ;; put client config options in :figwheel
-              :figwheel { :websocket-host "localhost" 
+              :figwheel { :websocket-host "localhost"
                           :on-jsload "example.core/fig-reload"}
-                          
+
               :compiler {  :main "example.core"
                            :asset-path "js/out"
                            :output-to "resources/public/js/example.js"
@@ -374,7 +365,7 @@ The following configuration options are available:
 ;; Configure :websocket-host for the figwheel js client to connect to.
 ;; (Don't specify the port; figwheel already knows it).
 ;; Defaults to "localhost".  Valid values are:
-;; 
+;;
 ;;   <any-string>      Uses that exact string as hostname.
 ;;
 ;;   :js-client-host   Uses window.location.hostname from JS.  This is useful when connecting
@@ -396,7 +387,7 @@ The following configuration options are available:
 ;; have compiled files autoloaded into the client env
 :autoload false
 
-;; The heads up display is enabled by default to disable it: 
+;; The heads up display is enabled by default to disable it:
 :heads-up-display false
 
 ;; when the compiler emits warnings figwheel blocks the loading of files.
@@ -427,10 +418,10 @@ The following configuration options are available:
 
 ### More Figwheel Configuration Information
 
-All Figwheel configuration options are fully specified in 
-[sidecar/src/figwheel_sidecar/schemas/config.clj](https://github.com/bhauman/lein-figwheel/blob/master/sidecar/src/figwheel_sidecar/schemas/config.clj). 
+All Figwheel configuration options are fully specified in
+[sidecar/src/figwheel_sidecar/schemas/config.clj](https://github.com/bhauman/lein-figwheel/blob/master/sidecar/src/figwheel_sidecar/schemas/config.clj).
 
-This is currently the ultimate configuration reference. (I'm planning on generating 
+This is currently the ultimate configuration reference. (I'm planning on generating
 an official config reference from this file.)
 
 ### Preventing and forcing file reloads
@@ -584,7 +575,7 @@ To start Figwheel from a script, you will need to require the
 
 ;; this will start figwheel and will start autocompiling the builds specified in `:builds-ids`
 (ra/start-figwheel!
-  {:figwheel-options {} ;; <-- figwheel server config goes here 
+  {:figwheel-options {} ;; <-- figwheel server config goes here
    :build-ids ["dev"]   ;; <-- a vector of build ids to start autobuilding
    :all-builds          ;; <-- supply your build configs here
    [{:id "dev"
@@ -595,7 +586,7 @@ To start Figwheel from a script, you will need to require the
                 :output-to "resources/public/main.js"
                 :output-dir "resources/public/out"
                 :verbose true}}]})
-                
+
 ;; you can also just call (ra/start-figwheel!)
 ;; and figwheel will do its best to get your config from the
 ;; project.clj or a figwheel.edn file
@@ -642,7 +633,7 @@ Let's make a small helper library and then initialize a Clojure REPL with it:
 
 (defn start []
   (ra/start-figwheel!
-    {:figwheel-options {} ;; <-- figwheel server config goes here 
+    {:figwheel-options {} ;; <-- figwheel server config goes here
      :build-ids ["dev"]   ;; <-- a vector of build ids to start autobuilding
      :all-builds          ;; <-- supply your build configs here
      [{:id "dev"
@@ -697,7 +688,7 @@ with a Ring server component to serve your application.
  '[ring.component.jetty :refer [jetty-server]])
 
 (def figwheel-config
-   {:figwheel-options {} ;; <-- figwheel server config goes here 
+   {:figwheel-options {} ;; <-- figwheel server config goes here
     :build-ids ["dev"]   ;; <-- a vector of build ids to start autobuilding
     :all-builds          ;; <-- supply your build configs here
     [{:id "dev"
@@ -780,7 +771,7 @@ If you like Figwheel and want to support its development:
 <img src="https://s3.amazonaws.com/bhauman-blog-images/Smaller%2BDonate%2BButton%402x.png" width="200">
 </a>
 
-### Not Magic, just plain old file reloading 
+### Not Magic, just plain old file reloading
 
 This plugin starts a ClojureScript auto builder, opens a websocket and
 starts static file server. When you save a ClojureScript file,
@@ -792,21 +783,21 @@ browser can reload them.
 
 The main motivation for lein-figwheel is to allow for the interactive
 development of ClojureScript. Figwheel doesn't provide this out of the
-box, **the developer has to take care to make their code reloadable**. 
+box, **the developer has to take care to make their code reloadable**.
 
 ## Writing reloadable code
 
-Figwheel relies on having files that can be reloaded. 
+Figwheel relies on having files that can be reloaded.
 
 Reloading works beautifully on referentially transparent code and
 code that only defines behavior without bundling state with the
-behavior. 
+behavior.
 
 If you are using React or Om it's not hard to write reloadable code,
 in fact you might be doing it already.
 
 There are several coding patterns to look out for when writing
-reloadable code. 
+reloadable code.
 
 One problematic pattern is top level definitions that have local
 state.
@@ -857,8 +848,8 @@ APIs directly has always been really difficult. For instance if we make
 it so that these hooks are only executed once, like so:
 
 ```clojure
-(defonce setup-stuff 
-  (do 
+(defonce setup-stuff
+  (do
      (.click ($ "a.button") (fn [e] (print "clicked button")))))
 ```
 
@@ -869,8 +860,8 @@ have the listener bound to them.
 You can fix this by using an event delegation strategy as so:
 
 ```clojure  
-(defonce setup-stuff 
-  (do 
+(defonce setup-stuff
+  (do
      (.on ($ "div#app") "click" "a.button" (fn [e] (print "clicked button")))))
 ```
 
